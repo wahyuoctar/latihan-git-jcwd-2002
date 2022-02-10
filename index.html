@@ -42,7 +42,7 @@
       </select>
       <br />
       <br />
-      <button onclick="addData()">Create Data</button>
+      <button>Create Data</button>
     </fieldset>
 
     <br />
@@ -61,7 +61,18 @@
           <th colspan="2">Action</th>
         </tr>
       </thead>
-      <tbody id="tableData"></tbody>
+
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>John@mail.com</td>
+          <td>29</td>
+          <td>Software Developer</td>
+          <td><button>Edit</button></td>
+          <td><button>Delete</button></td>
+        </tr>
+      </tbody>
     </table>
 
     <br />
@@ -70,12 +81,12 @@
     <fieldset>
       <legend>Search Employee</legend>
       <label for="fname">Employee Name:</label>
-      <input type="text" id="searchFname" name="fname" />
+      <input type="text" id="fname" name="fname" />
       <br />
       <br />
       <label for="occupation">Occupation</label>
-      <select id="searchOccupation">
-        <option value="">All Occupations</option>
+      <select id="occupation">
+        <option>All Occupations</option>
         <option>Software Developer</option>
         <option>UI/UX</option>
         <option>Digital Marketer</option>
@@ -83,7 +94,7 @@
       </select>
       <br />
       <br />
-      <button onclick="searchEmployee()">Search Employee</button>
+      <button>Search Employee</button>
     </fieldset>
 
     <table>
@@ -100,157 +111,15 @@
         </tr>
       </thead>
 
-      <tbody id="tableDataSearch"></tbody>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>John Doe</td>
+          <td>John@mail.com</td>
+          <td>29</td>
+          <td>Software Developer</td>
+        </tr>
+      </tbody>
     </table>
-
-    <script>
-      class Person {
-        constructor({ fullName, occupation, gender, email, age }) {
-          this.fullName = fullName;
-          this.occupation = occupation;
-          this.email = email;
-          this.age = age;
-        }
-      }
-      let data = [
-        new Person({
-          fullName: "John Doe",
-          email: "John@mail.com",
-          age: 29,
-          occupation: "Software Developer",
-        }),
-      ];
-
-      const renderData = (editIdx) => {
-        listData = "";
-        data.forEach((val, idx) => {
-          if (idx == editIdx) {
-            listData += `
-            <tr>
-              <td>${idx + 1}</td>
-              <td><input type="text" id="editFullName" value="${
-                val.fullName
-              }"/></td>
-              <td><input type="text" id="editEmail" value="${val.email}" /></td>
-              <td><input type="text" id="editAge" value="${val.age}" /></td>
-              <td>
-                <select id="editOccupation">
-                  <option  ${
-                    val.occupation == "Software Engineer" ? "selected" : ""
-                  }>Software Developer</option>
-                  <option ${
-                    val.occupation == "UI/UX" ? "selected" : ""
-                  }>UI/UX</option>
-                  <option ${
-                    val.occupation == "Data Scientist" ? "selected" : ""
-                  }>Digital Marketer</option>
-                  <option ${
-                    val.occupation == "Digital Marketer" ? "selected" : ""
-                  }>Data Scientist</option>
-                </select>
-              </td>
-              <td><button onclick="renderData()">Cancel</button></td>
-              <td><button onclick="saveData(${idx})">Save</button></td>
-            </tr>
-          `;
-          } else {
-            listData += `
-            <tr>
-              <td>${idx + 1}</td>
-              <td>${val.fullName}</td>
-              <td>${val.email}</td>
-              <td>${val.age}</td>
-              <td>${val.occupation}</td>
-              <td><button onclick="renderData(${idx})">Edit</button></td>
-              <td><button onclick="deleteData(${idx})">Delete</button></td>
-            </tr>
-            `;
-          }
-        });
-        document.getElementById("tableData").innerHTML = listData;
-      };
-
-      const addData = () => {
-        const firstNameInput = document.getElementById("fname").value;
-        const lastNameInput = document.getElementById("lname").value;
-        const emailInput = document.getElementById("email").value;
-        const ageInput = document.getElementById("age").value;
-        const occupationInput = document.getElementById("occupation").value;
-
-        if (
-          !firstNameInput ||
-          !lastNameInput ||
-          !emailInput ||
-          !ageInput ||
-          !occupationInput
-        ) {
-          alert("kedua field harus diisi");
-          return;
-        }
-
-        const newPerson = new Person({
-          fullName: firstNameInput + " " + lastNameInput,
-          age: ageInput,
-          email: emailInput,
-          occupation: occupationInput,
-        });
-
-        data.push(newPerson);
-        renderData();
-
-        document.getElementById("fname").value = "";
-        document.getElementById("lname").value = "";
-        document.getElementById("email").value = "";
-        document.getElementById("age").value = "";
-      };
-      renderData();
-
-      const deleteData = (deleteIdx) => {
-        data.splice(deleteIdx, 1);
-        renderData();
-      };
-
-      const saveData = (editIdx) => {
-        const fullNameInput = document.getElementById("editFullName").value;
-        const emailInput = document.getElementById("editEmail").value;
-        const ageInput = document.getElementById("editAge").value;
-        const occupationInput = document.getElementById("editOccupation").value;
-
-        data[editIdx].fullName = fullNameInput;
-        data[editIdx].email = emailInput;
-        data[editIdx].age = ageInput;
-        data[editIdx].occupation = occupationInput;
-
-        renderData();
-      };
-
-      const searchEmployee = () => {
-        const seacrhEmployeeByName =
-          document.getElementById("searchFname").value;
-        const searchEmployeeByOccupation =
-          document.getElementById("searchOccupation").value;
-
-        let listData = "";
-        data.forEach((val, idx) => {
-          if (
-            val.fullName
-              .toLowerCase()
-              .includes(seacrhEmployeeByName.toLowerCase()) &&
-            val.occupation.includes(searchEmployeeByOccupation)
-          ) {
-            listData += `
-            <tr>
-              <td>${idx + 1}</td>
-              <td>${val.fullName}</td>
-              <td>${val.email}</td>
-              <td>${val.age}</td>
-              <td>${val.occupation}</td>
-            </tr>
-            `;
-          }
-        });
-        document.getElementById("tableDataSearch").innerHTML = listData;
-      };
-    </script>
   </body>
 </html>
